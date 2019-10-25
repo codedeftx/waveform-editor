@@ -21,6 +21,7 @@
 .env.production.local
 
 *.mp3
+*.mp4
 *.png
 
 npm-debug.log*

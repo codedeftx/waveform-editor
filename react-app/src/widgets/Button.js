@@ -8,7 +8,9 @@ export default props => {
     props.onClick(event);
   }
 
+  const { remove } = props;
+
   return <button
-    className='button'
+    className={`button ${remove ? 'remove' : ''}`}
     onClick={handleClick}>{props.value}</button>
 };

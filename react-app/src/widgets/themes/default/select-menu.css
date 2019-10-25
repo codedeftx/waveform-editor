@@ -15,7 +15,7 @@
   width:100%;
 }
 
-.selected.dropdown-menu-span{ padding:.5rem; font-weight:800; }
+.selected.dropdown-menu-span{ padding:.5rem; }
 
 .selected.dropdown-menu-symbol {
   padding:.5rem;
@@ -39,7 +39,6 @@
   transform: scale(1, 0);
   display:flex;
   flex-wrap:wrap;
-  padding:1rem 0;
   z-index:2;
 }
 .dropdown-menu-list.animate-open{ transform: scale(1,1); }
@@ -49,7 +48,7 @@
   background-color:#eee;
   border-radius:1rem;
   padding:.375rem 0;
-  margin:.5rem;
+  margin:.125rem;
   transition: color .2s ease-in;
   transition: background-color .2s ease-in;
   width:100%;

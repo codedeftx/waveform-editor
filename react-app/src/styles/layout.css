@@ -1,12 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
 
-*{
+* {
   margin: 0;
   padding: 0;
   border: 0;
   font-size: 100%;
   font: inherit;
   vertical-align: baseline;
+  box-sizing:border-box;
 }
 
 html { 
@@ -50,17 +51,13 @@ h2 {
   background-color:#a0a0a0;
 }
 
-.flex-wrapper{
-  display:flex;
-}
+.display\:flex{ display:flex; }
+.flex\:wrap{ flex-wrap:wrap; }
+.alignItems\:center{ align-items:center; }
 
-.label-wrapper{
-  width:50%;
-}
+.label-wrapper{ width:50%; }
 
-.control-wrapper{
-  width:50%;
-}
+.control-wrapper{ width:50%; }
 
 .control-section{
   display:flex;

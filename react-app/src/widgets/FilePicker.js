@@ -30,8 +30,13 @@ export default props => {
       ref={file_input}
       value=''
       type='file' />
-    <Button onClick={clickChooseFile} value='Select File' />
-    { file_name && <span>{file_name}</span> }
-    { file_name && <div onClick={clickClearSelection}>{'Clear'}</div> }
+    { 
+      file_name === ''
+      ? <Button onClick={clickChooseFile} value='Select File' />
+      : <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+        <span>{file_name}</span>
+        <Button remove onClick={clickClearSelection} value='delete' />
+      </div>
+    }
   </div>;
 };

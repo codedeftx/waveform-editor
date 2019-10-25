@@ -1,0 +1,8 @@
+.number-input{
+  box-sizing: border-box;
+  flex-grow:1;
+  border-radius:1rem;
+  color:#030303;
+  width:100%;
+  padding: .5rem;
+}

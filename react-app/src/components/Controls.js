@@ -1,7 +1,9 @@
-import SelectMenu from 'widgets/SelectMenu.js';
-import FilePicker from 'widgets/FilePicker.js';
+import NumberInput from 'widgets/NumberInput';
+import TextInput from 'widgets/TextInput';
+import SelectMenu from 'widgets/SelectMenu';
+import FilePicker from 'widgets/FilePicker';
 import React from 'react';
-import { colors, resolutions, fonts } from 'data';
+import { resolutions, fonts } from 'data';
 
 const controlSectionStyle = {
   marginBottom : '12px' 
@@ -11,8 +13,12 @@ export default props => {
 
   const {
     canvas_state
+    , progress_bar_state
+    , waveform_state
     , background_state
     , overlay_text_state
+    , progressBarReducer
+    , waveformReducer
     , canvasReducer
     , backgroundReducer
     , overlayTextReducer 
@@ -96,9 +102,8 @@ export default props => {
     overlayTextReducer({ ...overlay_text_state, color });
   };
 
-  const onChangeOverlayTextFont = event => {
-    const font = event.target.value;
-    overlayTextReducer({ ...overlay_text_state, font });
+  const onChangeOverlayTextFont = (value, index)=> {
+    overlayTextReducer({ ...overlay_text_state, font : value });
   };
 
   const onChangeOverlayTextBold = event => {
@@ -115,8 +120,32 @@ export default props => {
     });
   };
 
+  const onChangeWaveformColor = event => waveformReducer({
+    ...waveform_state, color : event.target.value
+  });
+
+  const onChangeWaveformTranslateY = event => waveformReducer({
+    ...waveform_state, translate_y: event.target.value
+  });
+
+  const onChangeProgressBarColor = event => progressBarReducer({
+    ...progress_bar_state, color : event.target.value
+  });
+
+  const onChangeProgressBarScaleY = event => progressBarReducer({
+    ...progress_bar_state, scale_y: event.target.value
+  });
+
+  const onChangeProgressBarTranslateY = event => progressBarReducer({
+    ...progress_bar_state, translate_y : event.target.value
+  });
+
+  const onChangeProgressBarWidth = event => progressBarReducer({
+    ...progress_bar_state, width : event.target.value
+  });
+
   return <div>
-    <div className=''>
+    <div style={{marginBottom:'.5rem'}}>
       <h2>{'Canvas Settings'}</h2>
       <div className='control-section'>
         <div className='label-wrapper'>
@@ -130,7 +159,7 @@ export default props => {
         </div>
       </div>
     </div>
-    <div style={controlSectionStyle}>
+    <div>
       <h2>{'Background'}</h2>
       <FilePicker
         onSelect={onChangeBackgroundImage}
@@ -138,111 +167,203 @@ export default props => {
     </div>
     {
       background_state.image_base_64 && <>
-        <div style={controlSectionStyle}>
-          <label>{'Translate (X,Y)'}</label>
-          <input
-            style={{width:'48px'}}
-            size={4}
-            type='number'
-            value={background_state.translate[0]}
-            onChange={onChangeBackgroundTranslateX} />
-          <input
-            style={{width:'48px'}}
-            size={4}
-            type='number'
-            value={background_state.translate[1]}
-            onChange={onChangeBackgroundTranslateY} />
+        <div className='display:flex flex:wrap'>
+          <div style={{width:'100%',padding:'.5rem 0 .125rem 0'}}>
+            <label>{'Translate (X,Y)'}</label>
+          </div>
+          <div style={{width:'50%',paddingRight:'.5rem'}}>
+            <NumberInput
+              value={background_state.translate[0]}
+              onChange={onChangeBackgroundTranslateX} />
+          </div>
+          <div style={{width:'50%'}}>
+            <NumberInput
+              value={background_state.translate[1]}
+              onChange={onChangeBackgroundTranslateY} />
+          </div>
         </div>
-        <div style={controlSectionStyle}>
-          <label>{'Scale'}</label>
-          <input
-            style={{width:'48px'}}
-            size={4}
-            type='number'
-            step='0.01'
-            value={background_state.scale}
-            onChange={onChangeBackgroundScale} />
+        <div className='display:flex flex:wrap' style={{marginTop:'1rem'}}>
+          <div style={{width:'50%',padding:'.5rem 0 .125rem 0'}}>
+            <label>{'Scale'}</label>
+          </div>
+          <div style={{width:'50%'}}>
+            <NumberInput
+              step='0.01'
+              value={background_state.scale}
+	      onChange={onChangeBackgroundScale} />
+          </div>
         </div>
       </>
     }
-    <div style={controlSectionStyle}>
-      <label>{'Color'}</label>
-      <SelectMenu
-        current={background_state.color}
-        onChange={onChangeBackgroundColor}
-        options={colors} />
+    <div
+      className='display:flex flex:wrap alignItems:center'
+      style={{marginTop:'1rem'}}>
+      <div style={{width:'50%',padding:'.5rem 0 .125rem 0'}}>
+        <label>{'Color'}</label>
+      </div>
+      <div style={{width:'50%'}}>
+        <TextInput
+          value={background_state.color}
+          onChange={event => onChangeBackgroundColor(event.target.value)} />
+      </div>
     </div>
-    <div style={controlSectionStyle}>
+    <div>
       <h2>{'Overlay Text'}</h2>
-      <input
-        type='text'
+      <TextInput
         value={overlay_text_state.value}
         onChange={onChangeOverlayTextValue} />
     </div>
     {
       overlay_text_state.value && <>
-        <div style={controlSectionStyle}>
-          <label>{'Translate (X,Y)'}</label>
-          <input
-            style={{width:'48px'}}
-            size={4}
-            type='number'
-            value={overlay_text_state.translate[0]}
+        <div className='display:flex flex:wrap'>
+          <div style={{width:'100%',padding:'.5rem 0 .125rem 0'}}>
+            <label>{'Translate (X,Y)'}</label>
+          </div>
+          <div style={{width:'50%',paddingRight:'.5rem'}}>
+            <NumberInput
+              value={overlay_text_state.translate[0]}
             onChange={onChangeOverlayTextTranslateX} />
-          <input
-            style={{width:'48px'}}
-            size={4}
-            type='number'
-            value={overlay_text_state.translate[1]}
-            onChange={onChangeOverlayTextTranslateY} />
+          </div>
+          <div style={{width:'50%'}}>
+            <NumberInput
+              value={overlay_text_state.translate[1]}
+              onChange={onChangeOverlayTextTranslateY} />
+          </div>
+        </div>
+        <div
+          className='display:flex flex:wrap alignItems:center'
+          style={{marginTop:'1rem'}}>
+          <div style={{width:'50%'}}>
+            <label>{'Font Size'}</label>
+          </div>
+          <div style={{width:'50%'}}>
+            <NumberInput
+              value={overlay_text_state.font_size}
+              onChange={onChangeOverlayTextFontSize} />
+          </div>
+        </div>
+        <div
+          className='display:flex flex:wrap alignItems:center'
+          style={{marginTop:'1rem'}}>
+          <div style={{width:'50%',padding:'.5rem 0 .125rem 0'}}>
+            <label>{'Color'}</label>
+          </div>
+          <div style={{width:'50%'}}>
+            <TextInput
+              value={overlay_text_state.color}
+              onChange={onChangeOverlayTextColor} />
+          </div>
         </div>
         <div style={controlSectionStyle}>
-          <label>{'Font Size (px)'}</label>
-          <input
-            style={{width:'48px'}}
-            size={4}
-            type='number'
-            step='1'
-            value={overlay_text_state.font_size}
-            onChange={onChangeOverlayTextFontSize} />
+          <div style={{padding:'.5rem 0 .125rem 0'}}>
+            <label>{'Family'}</label>
+          </div>
+          <div>
+            <SelectMenu
+              current={overlay_text_state.font}
+              onChange={onChangeOverlayTextFont}
+              options={fonts} />
+          </div>
         </div>
-        <div style={controlSectionStyle}>
-          <label>{'Color'}</label>
-          <select
-            value={overlay_text_state.color}
-            onChange={onChangeOverlayTextColor}>
-            {
-              colors.map((x,i) =>
-                <option value={x} key={i}>{x}</option>
-              )
-            }
-          </select>
-        </div>
-        <div style={controlSectionStyle}>
-          <label>{'Font'}</label>
-          <select
-            value={overlay_text_state.font}
-            onChange={onChangeOverlayTextFont}>
-            {
-              fonts.map((x,i) =>
-                <option value={x} key={i}>{x}</option>
-              )
-            }
-          </select>
-        </div>
-        <div style={controlSectionStyle}>
-          <label>{'Bold'}</label>
-          <input
-            type='checkbox'
-            value={overlay_text_state.bold}
-            onChange={onChangeOverlayTextBold} />
-          <label>{'Italic'}</label>
-          <input
-            type='checkbox'
-            value={overlay_text_state.italic}
-            onChange={onChangeOverlayTextItalic} />
+        <div style={{
+          display:'flex'
+          , alignItems:'center'
+        }}>
+          <div>
+            <input
+              id='bold-checkbox'
+              style={{marginRight:'.375rem'}}
+              type='checkbox'
+              value={overlay_text_state.bold}
+              onChange={onChangeOverlayTextBold} />
+            <label htmlFor='bold-checkbox'>{'Bold'}</label>
+          </div>
+          <div>
+            <input
+              id='italic-checkbox'
+              style={{marginLeft:'1rem',marginRight:'.375rem'}}
+              type='checkbox'
+              value={overlay_text_state.italic}
+              onChange={onChangeOverlayTextItalic} />
+            <label htmlFor='italic-checkbox'>{'Italic'}</label>
+          </div>
         </div>
       </>
     }
+    <div>
+      <h2>{'Waveform Settings'}</h2>
+      <div className='display:flex flex:wrap alignItems:center'>
+        <div style={{width:'50%'}}>
+          <label>{'Color'}</label>
+        </div>
+        <div style={{width:'50%'}}>
+          <TextInput
+            value={waveform_state.color}
+            onChange={onChangeWaveformColor} />
+        </div>
+      </div>
+      <div
+        style={{marginTop:'1rem'}}
+        className='display:flex flex:wrap alignItems:center'>
+        <div style={{width:'50%'}}>
+          <label>{'Y Offset'}</label>
+        </div>
+        <div style={{width:'50%'}}>
+          <NumberInput
+            value={waveform_state.translate_y}
+            onChange={onChangeWaveformTranslateY} />
+        </div>
+      </div>
+    </div>
+    <div>
+      <h2>{'Progress Bar Settings'}</h2>
+      <div className='display:flex flex:wrap alignItems:center'>
+        <div style={{width:'50%'}}>
+          <label>{'Color'}</label>
+        </div>
+        <div style={{width:'50%'}}>
+          <TextInput
+            value={progress_bar_state.color}
+            onChange={onChangeProgressBarColor} />
+        </div>
+      </div>
+      <div
+        style={{margin:'1rem 0'}}
+        className='display:flex flex:wrap alignItems:center'>
+        <div style={{width:'50%'}}>
+          <label>{'Translate Y'}</label>
+        </div>
+        <div style={{width:'50%'}}>
+          <NumberInput
+            value={progress_bar_state.translate_y}
+            onChange={onChangeProgressBarTranslateY} />
+        </div>
+      </div>
+      <div
+        style={{margin:'1rem 0'}}
+        className='display:flex flex:wrap alignItems:center'>
+        <div style={{width:'50%'}}>
+          <label>{'Scale Y'}</label>
+        </div>
+        <div style={{width:'50%'}}>
+          <NumberInput
+            min={0} max={1} step={.1}
+            value={progress_bar_state.scale_y}
+            onChange={onChangeProgressBarScaleY} />
+        </div>
+      </div>
+      <div
+        style={{margin:'1rem 0'}}
+        className='display:flex flex:wrap alignItems:center'>
+        <div style={{width:'50%'}}>
+          <label>{'Width'}</label>
+        </div>
+        <div style={{width:'50%'}}>
+          <NumberInput
+            value={progress_bar_state.width}
+            onChange={onChangeProgressBarWidth} />
+        </div>
+      </div>
+    </div>
   </div>;
 }
