@@ -36,6 +36,8 @@ app.post(
     const { job_id, frame_count, audio_file_id } = req.body;
     const key = `job:${job_id}`;
 
+    const rm = spawn('rm' , [ `./jobs/${job_id}/*.png` ], { shell : true });
+
     redis_client.set(key, JSON.stringify({
       job_id
       , frame_count
@@ -51,6 +53,7 @@ app.post(
   , (req, res) => {
 
     const { job_id, frame_index } = req.body;
+
 
     redis_client.get(`job:${job_id}`, (error, result) => {
 
@@ -83,16 +86,18 @@ app.get(
       const image_path = `./jobs/${req.params.id}/%d.png`;
       const audio_path = `./audio/${file_name}`;
       const destination = `./video/${req.params.id}.mp4`;
- 
+
+
+
       const ffmpeg = spawn(
         'ffmpeg'
         , [ '-i', image_path, '-i', audio_path, '-c:a', 'copy', '-shortest', '-y', destination ]
       );
- 
+
       ffmpeg.stdout.on('data', (data) => {
         console.log(`stdout: ${data}`);
       });
- 
+
       ffmpeg.stderr.on('data', (data) => {
         console.error(`stderr: ${data}`);
       });
@@ -100,6 +105,8 @@ app.get(
       ffmpeg.on('close',() => {
         res.sendFile(path.resolve(destination));
       });
+
+ 
 
     });
   }
